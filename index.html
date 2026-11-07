@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>goodtrack – Cập nhật đơn hàng cho shop order</title>
+<meta name="description" content="goodtrack là hệ thống cập nhật đơn hàng trực tuyến cho các shop order, pick up: mỗi đơn một link, khách tự xem đơn đang ở bước nào, đã cọc bao nhiêu, ngày dự kiến về. Ra mắt 14/11.">
+<!-- Link theo tài khoản GitHub hoanghnamm, đổi nếu dùng tài khoản khác (xem README, bước 3) -->
+<link rel="canonical" href="https://hoanghnamm.github.io/goodtrack/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="vi_VN">
+<meta property="og:site_name" content="goodtrack">
+<meta property="og:title" content="goodtrack – Cập nhật đơn hàng cho shop order">
+<meta property="og:description" content="Mỗi đơn một link riêng, khách tự theo dõi đơn thay vì nhắn hỏi. Ra mắt 14/11, giảm 50% tháng đầu khi đăng ký sớm.">
+<meta property="og:url" content="https://hoanghnamm.github.io/goodtrack/">
+<meta property="og:image" content="https://hoanghnamm.github.io/goodtrack/og.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="goodtrack – đăng ký dùng thử sớm">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#2f78ee">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap"></noscript>
+<link rel="stylesheet" href="styles.css">
+<script src="main.js" defer></script>
+<script type="module" src="clouds/sky.js"></script>
+</head>
+<body>
+
+<!-- Bộ biểu tượng SVG, dùng lại bằng <use href="#..."> -->
+<svg class="sprite" aria-hidden="true">
+  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></symbol>
+  <symbol id="i-tag" viewBox="0 0 24 24"><path d="M20.6 13.4l-7.2 7.2a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.5"/></symbol>
+  <symbol id="i-gift" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="5" rx="1"/><path d="M5 13v8h14v-8M12 8v13M12 8S10.5 3 8 3a2.5 2.5 0 0 0 0 5M12 8s1.5-5 4-5a2.5 2.5 0 0 1 0 5"/></symbol>
+  <symbol id="i-doc" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 8h8M8 12h8M8 16h4"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24"><path d="M21 3L10 14"/><path d="M21 3l-7 18-4-7-7-4z"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7"/></symbol>
+  <symbol id="i-ig" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5.5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1.2" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-fb" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5"/><path d="M15.5 7.5H14a2 2 0 0 0-2 2v12M9 13h6"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M4 7l8 6 8-6"/></symbol>
+  <symbol id="i-cloud" viewBox="0 0 24 24"><path d="M7 19h10.5a4.5 4.5 0 0 0 .4-9A6.5 6.5 0 0 0 5.5 9.2 5 5 0 0 0 7 19z" fill="currentColor" stroke="none"/></symbol>
+  <!-- iOS / Instagram -->
+  <symbol id="i-status" viewBox="0 0 78 14">
+    <g fill="currentColor" stroke="none"><rect x="0" y="9" width="3.2" height="4" rx="1"/><rect x="5" y="6.5" width="3.2" height="6.5" rx="1"/><rect x="10" y="4" width="3.2" height="9" rx="1"/><rect x="15" y="1.5" width="3.2" height="11.5" rx="1"/><circle cx="32" cy="11.4" r="1.7"/><rect x="50.5" y="3" width="18.5" height="8" rx="2"/><path d="M73.8 5.2v3.6a2 2 0 0 0 0-3.6z"/></g>
+    <path d="M25.3 5.4a9.6 9.6 0 0 1 13.4 0M28.1 8.3a5.6 5.6 0 0 1 7.8 0" stroke-width="2"/>
+    <rect x="48.5" y="1" width="22.5" height="12" rx="3.6" stroke-width="1.1" opacity=".4"/>
+  </symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="M15 4l-8 8 8 8"/></symbol>
+  <symbol id="i-call" viewBox="0 0 24 24"><path d="M21 16.4v3a1.8 1.8 0 0 1-2 1.8 17.8 17.8 0 0 1-7.8-2.8 17.5 17.5 0 0 1-5.4-5.4A17.8 17.8 0 0 1 3 5.2 1.8 1.8 0 0 1 4.8 3h3a1.8 1.8 0 0 1 1.8 1.5c.1.8.3 1.6.6 2.4a1.8 1.8 0 0 1-.4 1.9L8.5 10a14.4 14.4 0 0 0 5.4 5.4l1.3-1.3a1.8 1.8 0 0 1 1.9-.4c.8.3 1.6.5 2.4.6a1.8 1.8 0 0 1 1.5 1.8z"/></symbol>
+  <symbol id="i-video" viewBox="0 0 24 24"><rect x="2" y="6" width="14" height="12" rx="3"/><path d="M16 10.5l6-3.5v10l-6-3.5"/></symbol>
+  <symbol id="i-cam" viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.5"/></symbol>
+  <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="2.5" width="6" height="11.5" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3.5"/></symbol>
+  <symbol id="i-img" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4.5"/><circle cx="8.5" cy="8.5" r="1.6"/><path d="M21 15l-5-5L5 21"/></symbol>
+  <symbol id="i-smile" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8.5 14.5a4 4 0 0 0 7 0"/><circle cx="9" cy="9.8" r="1.1" fill="currentColor" stroke="none"/><circle cx="15" cy="9.8" r="1.1" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+  <symbol id="i-dots" viewBox="0 0 24 24"><g fill="currentColor" stroke="none"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></g></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2.5"/><path d="M8 11V7.5a4 4 0 0 1 8 0V11"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20.5s-7.6-4.6-9.5-9.2C1.1 8 3.3 4.5 6.9 4.5c2.1 0 3.6 1.2 5.1 3 1.5-1.8 3-3 5.1-3 3.6 0 5.8 3.5 4.4 6.8-1.9 4.6-9.5 9.2-9.5 9.2z" fill="currentColor" stroke="none"/></symbol>
+</svg>
+
+<!-- Trời và mây 3D (component mây của template quangcaongocan, xem tools/sky.ts) -->
+<div class="sky" aria-hidden="true">
+  <canvas class="clouds" data-clouds></canvas>
+</div>
+
+<main>
+  <!-- 1. ĐẦU TRANG + ĐĂNG KÝ -->
+  <section class="stage">
+    <h1 class="brand">goodtrack</h1>
+    <p class="tagline">Hệ thống cập nhật đơn hàng trực tuyến cho các shop order</p>
+    <ul class="perks">
+      <li><svg class="ic"><use href="#i-cal"/></svg>Ra mắt 14/11</li>
+      <li><svg class="ic"><use href="#i-tag"/></svg>Giảm 50% tháng đầu</li>
+      <li><svg class="ic"><use href="#i-gift"/></svg>7 ngày dùng thử miễn phí</li>
+    </ul>
+
+    <form id="waitlist" class="glass" novalidate>
+      <p class="form-title">Đăng ký danh sách chờ để giữ ưu đãi</p>
+      <label class="f">Tên shop
+        <input name="shop" required maxlength="100" autocomplete="organization" aria-describedby="shop-err" placeholder="Ví dụ: Nhà Sóc Order">
+      </label>
+      <p class="err" id="shop-err"></p>
+      <label class="f">Link Instagram, Facebook hoặc TikTok
+        <input name="social" required maxlength="200" inputmode="url" autocapitalize="off" spellcheck="false" aria-describedby="social-err" placeholder="Ví dụ: @tenshop">
+      </label>
+      <p class="err" id="social-err"></p>
+      <div class="hp" aria-hidden="true">
+        <label>Để trống ô này<input name="website" tabindex="-1" autocomplete="off"></label>
+      </div>
+      <button class="btn" type="submit">Đăng ký dùng thử sớm</button>
+      <p class="form-msg" id="form-msg" role="status" aria-live="polite"></p>
+    </form>
+
+    <div class="glass ok" id="wl-ok" hidden tabindex="-1">
+      <svg width="40" height="40" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#fff"/><path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="#2f78ee" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <p>Cảm ơn anh/chị! goodtrack sẽ liên hệ trước ngày ra mắt 14/11, kèm ưu đãi giảm 50% tháng đầu và 7 ngày dùng thử miễn phí.</p>
+    </div>
+  </section>
+
+  <!-- 2. VẤN ĐỀ -->
+  <section class="sec problem">
+    <div class="glass card">
+      <p class="kicker">Vấn đề</p>
+      <h2>Khách nhắn hỏi đơn cả ngày?</h2>
+      <p>Khách nhắn liên tục qua Instagram, Facebook để hỏi đơn tới đâu rồi, và anh/chị phải trả lời từng người một.</p>
+      <p>Với goodtrack, mỗi đơn có một link riêng. Khách bấm vào là thấy đơn đang ở bước nào, đã cọc bao nhiêu, ngày dự kiến về, nên tự theo dõi thay vì nhắn hỏi.</p>
+    </div>
+    <div class="chatter" aria-hidden="true">
+      <div class="q"><span class="av" style="--c:#ffd6c2">MA</span><p>Chị ơi giày em về đến đâu rồi?</p></div>
+      <div class="q"><span class="av" style="--c:#d9ccff">TH</span><p>Shop pick up chưa?</p></div>
+      <div class="q"><span class="av" style="--c:#c8f0dc">LP</span><p>Hàng đi chưa shop?</p></div>
+      <div class="q"><span class="av" style="--c:#fff0a8">QN</span><p class="typing"><i></i><i></i><i></i></p></div>
+    </div>
+  </section>
+
+  <!-- 3. CÁCH HOẠT ĐỘNG: 3 màn hình iPhone 17 (dữ liệu trong máy chỉ là ví dụ minh họa) -->
+  <section class="sec how">
+    <div class="sec-head">
+      <p class="kicker">Cách hoạt động</p>
+      <h2>Tạo đơn, gửi link, khách tự xem</h2>
+    </div>
+    <ol class="steps">
+      <!-- Bước 1: tạo đơn trên goodtrack -->
+      <li>
+        <div class="glass step">
+          <span class="step-ico"><svg class="ic"><use href="#i-doc"/></svg></span>
+          <p class="step-n">Bước 1</p>
+          <h3>Tạo đơn</h3>
+          <p>Nhập khách, sản phẩm, tiền cọc, ngày dự kiến về. goodtrack tạo một link riêng cho đơn đó.</p>
+        </div>
+        <div class="iphone" role="img" aria-label="Màn hình tạo đơn trên goodtrack: nhập thông tin đơn và sao chép link theo dõi">
+          <div class="iphone-body"><i class="hw act"></i><i class="hw vu"></i><i class="hw vd"></i><i class="hw pw"></i><i class="hw cc"></i>
+            <div class="screen gt">
+              <span class="island"></span>
+              <div class="status"><span>9:41</span><svg class="ic sb"><use href="#i-status"/></svg></div>
+              <div class="gt-nav"><span>Hủy</span><b>Đơn mới</b><span class="dim">Lưu</span></div>
+              <p class="gt-title">Tạo đơn</p>
+              <dl class="gt-list">
+                <div><dt>Khách</dt><dd>@minhanh.ng</dd></div>
+                <div><dt>Sản phẩm</dt><dd>Giày chạy bộ, size 38</dd></div>
+                <div><dt>Giá</dt><dd>3.200.000đ</dd></div>
+                <div><dt>Đã cọc</dt><dd>1.500.000đ</dd></div>
+                <div><dt>Dự kiến về</dt><dd>28/11</dd></div>
+              </dl>
+              <p class="gt-cap">Bước hiện tại</p>
+              <div class="gt-chips"><span class="on">Shop đã đặt</span><span>Hàng về kho</span><span>Đang ship</span><span>Đã giao</span></div>
+              <div class="gt-link">
+                <svg class="ic"><use href="#i-link"/></svg>
+                <div><b>Link theo dõi đã tạo</b><span>goodtrack.vn/d/NS1024</span></div>
+              </div>
+              <span class="gt-btn"><svg class="ic"><use href="#i-check"/></svg>Đã sao chép link</span>
+              <span class="home"></span>
+            </div>
+          </div>
+        </div>
+      </li>
+
+      <!-- Bước 2: gửi link qua tin nhắn Instagram -->
+      <li>
+        <div class="glass step">
+          <span class="step-ico"><svg class="ic"><use href="#i-send"/></svg></span>
+          <p class="step-n">Bước 2</p>
+          <h3>Gửi link qua Instagram</h3>
+          <p>Chốt đơn xong, dán link vào tin nhắn cho khách như bình thường. Khách không cần cài thêm gì.</p>
+        </div>
+        <div class="iphone" role="img" aria-label="Tin nhắn Instagram: khách hỏi đơn, shop gửi link theo dõi đơn, khách cảm ơn">
+          <div class="iphone-body"><i class="hw act"></i><i class="hw vu"></i><i class="hw vd"></i><i class="hw pw"></i><i class="hw cc"></i>
+            <div class="screen ig">
+              <span class="island"></span>
+              <div class="status"><span>9:41</span><svg class="ic sb"><use href="#i-status"/></svg></div>
+              <div class="ig-top">
+                <svg class="ic"><use href="#i-back"/></svg>
+                <span class="ig-ava">MA</span>
+                <div class="ig-name"><b>Minh Anh</b><small>minhanh.ng</small></div>
+                <svg class="ic"><use href="#i-call"/></svg>
+                <svg class="ic"><use href="#i-video"/></svg>
+              </div>
+              <div class="ig-chat">
+                <span class="ig-time">Hôm nay 14:20</span>
+                <p class="msg in"><span class="ig-ava sm">MA</span>Chị ơi giày em về đến đâu rồi ạ?</p>
+                <p class="msg out o1">Chị gửi em link theo dõi đơn nha, hàng tới đâu em bấm vào là thấy liền 💙</p>
+                <div class="ig-share">
+                  <div class="ig-card">
+                    <div class="ig-card-img"><svg class="ic c1"><use href="#i-cloud"/></svg><svg class="ic c2"><use href="#i-cloud"/></svg><span>goodtrack</span></div>
+                    <div class="ig-card-txt"><b>Đơn #NS1024 · Nhà Sóc Order</b><small>goodtrack.vn</small></div>
+                  </div>
+                  <p class="msg out o2"><u>https://goodtrack.vn/d/NS1024</u></p>
+                  <span class="ig-react"><svg class="ic"><use href="#i-heart"/></svg></span>
+                </div>
+                <p class="msg in"><span class="ig-ava sm">MA</span>Dạ em cảm ơn chị nhiều ạ</p>
+              </div>
+              <div class="ig-bar">
+                <span class="ig-cam"><svg class="ic"><use href="#i-cam"/></svg></span>
+                <span class="ig-ph">Nhắn tin...</span>
+                <svg class="ic"><use href="#i-mic"/></svg>
+                <svg class="ic"><use href="#i-img"/></svg>
+                <svg class="ic"><use href="#i-smile"/></svg>
+              </div>
+              <span class="home"></span>
+            </div>
+          </div>
+        </div>
+      </li>
+
+      <!-- Bước 3: khách bấm link, xem trang theo dõi -->
+      <li>
+        <div class="glass step">
+          <span class="step-ico"><svg class="ic"><use href="#i-eye"/></svg></span>
+          <p class="step-n">Bước 3</p>
+          <h3>Khách tự theo dõi</h3>
+          <p>Anh/chị cập nhật bước mới, khách bấm link là thấy ngay: đơn đang ở đâu, đã cọc, còn thiếu, ngày về.</p>
+        </div>
+        <div class="iphone" role="img" aria-label="Trang theo dõi đơn khách nhìn thấy: đơn đang ở bước Hàng về kho, đã cọc 1.500.000đ, còn thiếu 1.700.000đ, dự kiến về 28/11">
+          <div class="iphone-body"><i class="hw act"></i><i class="hw vu"></i><i class="hw vd"></i><i class="hw pw"></i><i class="hw cc"></i>
+            <div class="screen tr">
+              <span class="island"></span>
+              <div class="status"><span>9:41</span><svg class="ic sb"><use href="#i-status"/></svg></div>
+              <div class="br-bar">
+                <svg class="ic"><use href="#i-x"/></svg>
+                <div><b>goodtrack</b><small><svg class="ic"><use href="#i-lock"/></svg>goodtrack.vn</small></div>
+                <svg class="ic"><use href="#i-dots"/></svg>
+              </div>
+              <div class="tr-body">
+                <div class="tr-head">
+                  <span class="tr-logo">N</span>
+                  <div><b>Nhà Sóc Order</b><small>Đơn #NS1024</small></div>
+                </div>
+                <div class="tr-card">
+                  <p class="tr-hi">Chào Minh Anh, đơn của bạn đây</p>
+                  <p class="tr-prod">Giày chạy bộ, size 38</p>
+                  <div class="tr-seg"><i class="on"></i><i class="on"></i><i></i><i></i></div>
+                  <ol class="tr-steps">
+                    <li class="done"><svg class="ic"><use href="#i-check"/></svg>Shop đã đặt hàng</li>
+                    <li class="now"><i></i>Hàng về kho<small>Vừa cập nhật</small></li>
+                    <li><i></i>Đang ship</li>
+                    <li><i></i>Đã giao</li>
+                  </ol>
+                </div>
+                <dl class="tr-money">
+                  <div><dt>Đã cọc</dt><dd>1.500.000đ</dd></div>
+                  <div><dt>Giá</dt><dd>3.200.000đ</dd></div>
+                  <div class="due"><dt>Còn thiếu</dt><dd>1.700.000đ</dd></div>
+                </dl>
+                <div class="tr-eta"><svg class="ic"><use href="#i-cal"/></svg><span>Ngày dự kiến về</span><b>28/11</b></div>
+              </div>
+              <span class="home"></span>
+            </div>
+          </div>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <!-- 4. LIÊN HỆ -->
+  <section class="sec contact">
+    <div class="glass card">
+      <p class="kicker">Liên hệ</p>
+      <h2>Cần hỏi thêm?</h2>
+      <p>Anh/chị nhắn trực tiếp cho goodtrack để trao đổi nhé.</p>
+      <!-- THAY link Instagram, Facebook và email bằng thông tin thật (xem README, bước 3) -->
+      <div class="links">
+        <a class="pill" href="https://www.instagram.com/TEN-INSTAGRAM/" target="_blank" rel="noopener"><svg class="ic"><use href="#i-ig"/></svg>Instagram</a>
+        <a class="pill" href="https://www.facebook.com/TEN-FACEBOOK" target="_blank" rel="noopener"><svg class="ic"><use href="#i-fb"/></svg>Facebook</a>
+        <a class="pill" href="mailto:EMAIL@VIDU.COM"><svg class="ic"><use href="#i-mail"/></svg>Email</a>
+      </div>
+      <a class="btn btn-link" href="#waitlist">Đăng ký dùng thử sớm</a>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">© 2026 goodtrack · Ra mắt 14/11</footer>
+</body>
+</html>
