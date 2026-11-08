@@ -1,7 +1,7 @@
 // ================= CẤU HÌNH =================
 // Dán URL Web App của Google Apps Script vào giữa hai dấu nháy (xem README, bước 2).
 // Ví dụ: 'https://script.google.com/macros/s/AKfy.../exec'
-const WAITLIST_URL = '';
+const WAITLIST_URL = 'https://script.google.com/macros/s/AKfycbyPFm-YHuPjIXFpvbFMCaTL6stDZ1BpcsXl99nUXhOPqdp7nMKh6X8AEhDQCXo5DVIHHg/exec';
 // ============================================
 
 // Phải giống SOCIAL_RE trong apps-script/Code.gs
